@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Yours Todo\'s</string>
+    <string name="update">Update todo</string>
+    <string name="title">Title</string>
+    <string name="description">Description (optional)</string>
+    <string name="low">Low</string>
+    <string name="medium">Medium</string>
+    <string name="high">High</string>
+    <string name="addTodo">Add Todo</string>
+    <string name="quick_add">Quick Add</string>
+    <string name="new_task">New Task</string>
+    <string name="todo_image">Todo Image</string>
+    <string-array name="dialog_list">
+        <item>Edit</item>
+        <item>Delete</item>
+    </string-array>
+</resources>
