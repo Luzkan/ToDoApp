@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.luzkan.ToDoApp">
+    package="com.luzkan.todoapp">
 
     <application
             android:fullBackupContent="true"
@@ -12,14 +12,14 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="com.luzkan.ToDoApp.Todo.TodoActivity">
+        <activity android:name="com.luzkan.todoapp.todo.TodoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.luzkan.ToDoApp.Todo.AddTodoActivity">
+        <activity android:name="com.luzkan.todoapp.todo.AddTodoActivity">
             <!--<meta-data android:name="android.support.PARENT_ACTIVITY"/>-->
         </activity>
     </application>

@@ -1,4 +1,4 @@
-package com.luzkan.ToDoApp.Todo
+package com.luzkan.todoapp.todo
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,11 +6,10 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.widget.RadioGroup
 import android.widget.Toast
-import com.luzkan.ToDoApp.R
-import com.luzkan.ToDoApp.data.local.TodoListDatabase
-import com.luzkan.ToDoApp.data.local.models.Todo
+import com.luzkan.todoapp.R
+import com.luzkan.todoapp.data.local.TodoListDatabase
+import com.luzkan.todoapp.data.local.models.Todo
 import kotlinx.android.synthetic.main.activity_addtodo.*
-import java.text.SimpleDateFormat
 
 class AddTodoActivity: AppCompatActivity(), RadioGroup.OnCheckedChangeListener{
 
@@ -25,7 +24,6 @@ class AddTodoActivity: AppCompatActivity(), RadioGroup.OnCheckedChangeListener{
 
         todoDatabase = TodoListDatabase.getInstance(this)
         radioGroup.setOnCheckedChangeListener(this)
-
 
         // Moved from the main TodoActivity, retrieving those values here
         val title = intent.getStringExtra("title")

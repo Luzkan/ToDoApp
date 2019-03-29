@@ -1,10 +1,10 @@
-package com.luzkan.ToDoApp.data.local
+package com.luzkan.todoapp.data.local
 
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
-import com.luzkan.ToDoApp.data.local.models.Todo
+import com.luzkan.todoapp.data.local.models.Todo
 
 @Database(entities = [Todo::class], version = 1, exportSchema = false)
 abstract class TodoListDatabase: RoomDatabase(){

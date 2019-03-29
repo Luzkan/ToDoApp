@@ -1,4 +1,4 @@
-package com.luzkan.ToDoApp
+package com.luzkan.todoapp
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4

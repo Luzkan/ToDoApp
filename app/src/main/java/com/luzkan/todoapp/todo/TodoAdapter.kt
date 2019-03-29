@@ -1,4 +1,4 @@
-package com.luzkan.ToDoApp.Todo
+package com.luzkan.todoapp.todo
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.luzkan.ToDoApp.R
-import com.luzkan.ToDoApp.data.local.models.Todo
+import com.luzkan.todoapp.R
+import com.luzkan.todoapp.data.local.models.Todo
 import java.util.ArrayList
 
 class TodoAdapter(var todoList: List<Todo>? = ArrayList()): RecyclerView.Adapter<TodoAdapter.TodoViewHolder>(){

@@ -1,4 +1,4 @@
-package com.luzkan.ToDoApp.data.local.models
+package com.luzkan.todoapp.data.local.models
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity

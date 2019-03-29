@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/action_menudrop"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_menu"
+        app:showAsAction="always"
+        android:title="@string/menu">
+        <menu>
+            <item
+                android:id="@+id/menu_sort"
+                android:orderInCategory="200"
+                android:title="@string/sort"
+                android:icon="@drawable/ic_sort" />
+
+            <item
+                android:id="@+id/menu_deleteall"
+                android:orderInCategory="300"
+                android:title="@string/clear"
+                android:icon="@drawable/ic_deleteall" />
+        </menu>
+    </item>
+
+
+
+</menu>

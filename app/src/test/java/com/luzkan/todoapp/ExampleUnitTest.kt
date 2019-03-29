@@ -1,4 +1,4 @@
-package com.luzkan.ToDoApp
+package com.luzkan.todoapp
 
 import org.junit.Test
 

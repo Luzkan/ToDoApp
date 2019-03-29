@@ -1,7 +1,7 @@
-package com.luzkan.ToDoApp.data.local
+package com.luzkan.todoapp.data.local
 
 import android.arch.persistence.room.*
-import com.luzkan.ToDoApp.data.local.models.Todo
+import com.luzkan.todoapp.data.local.models.Todo
 
 @Dao
 interface TodoInterface{

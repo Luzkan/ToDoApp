@@ -1,18 +1,19 @@
-package com.luzkan.ToDoApp.Todo
+package com.luzkan.todoapp.todo
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
-import com.luzkan.ToDoApp.R
-import com.luzkan.ToDoApp.data.local.TodoListDatabase
-import com.luzkan.ToDoApp.data.local.models.Todo
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
+import com.luzkan.todoapp.R
+import com.luzkan.todoapp.data.local.TodoListDatabase
+import com.luzkan.todoapp.data.local.models.Todo
 import kotlinx.android.synthetic.main.activity_main.*
 
 class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
-
 
     private var todoDatabase: TodoListDatabase? = null
     private var todoAdapter: TodoAdapter? = null
@@ -85,5 +86,46 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
         }.create()
 
         alertDialog.show()
+    }
+
+    // Menu
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu (adds items to the action bar if it is present)
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        if (id == R.id.menu_sort) {
+            // TODO: Create pop-up for sorts: ID (Time Added), Priority; maybe: Datetime [I have project in Ada todo today...]
+            return true
+        }
+        if (id == R.id.menu_deleteall) {
+            // Alert
+            if(todoDatabase?.getTodo()?.getTodoList().isNullOrEmpty()){
+                Toast.makeText(applicationContext,"You've got no todo's.",Toast.LENGTH_SHORT).show()
+            }else{
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle("Clear all Todo's")
+                builder.setMessage("Do you really want to clear all todo's?")
+                builder.setIcon(android.R.drawable.ic_dialog_alert)
+                builder.setPositiveButton("Yes"){ _, _ ->
+                    for(todo in todoDatabase?.getTodo()?.getTodoList()!!) {
+                        todoDatabase?.getTodo()?.removeTodo(todo)
+                        onResume()
+                    }
+                    Toast.makeText(applicationContext,"Cleared all todos.",Toast.LENGTH_SHORT).show()
+                }
+                builder.setNeutralButton("Cancel"){ _, _ ->
+                }
+                val alertDialog: AlertDialog = builder.create()
+                alertDialog.setCancelable(false)
+                alertDialog.show()
+            }
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 }
