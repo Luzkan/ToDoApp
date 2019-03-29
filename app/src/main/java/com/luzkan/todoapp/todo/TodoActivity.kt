@@ -32,7 +32,7 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
         // Action button that moves user to adding interface
         add_todo.setOnClickListener { startActivity(Intent(this, AddTodoActivity::class.java)) }
 
-        // Quick button in the main menu
+        // Quick Add button in the main menu
         addTodoQuick.setOnClickListener{
 
             // Unlike AddTodoActivity, here if someone just presses a button, it can as well do nothing
