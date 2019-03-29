@@ -17,6 +17,9 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
 
     private var todoDatabase: TodoListDatabase? = null
     private var todoAdapter: TodoAdapter? = null
+    // I'm unsure if sortedBy should be remembered in onPause() so it's the same after app closure
+    // That's one of the things that would be cool to change after some feedback from users
+    private var sortedBy = "tId"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,10 +50,10 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
     // Loads data back and sets adapter to ListView
     override fun onResume() {
         super.onResume()
-        todoAdapter?.todoList=todoDatabase?.getTodo()?.getTodoList()
-        todo_rv.adapter = todoAdapter
-        todo_rv.layoutManager = LinearLayoutManager(this)
-        todo_rv.hasFixedSize()
+        todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListSorted(sortedBy)
+        todoMainList.adapter = todoAdapter
+        todoMainList.layoutManager = LinearLayoutManager(this)
+        todoMainList.hasFixedSize()
     }
 
     // Pressing task moves user to edit screen
@@ -95,14 +98,15 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
         return true
     }
 
+    var rvrsDAdded = true
+    var rvrsPrior = true
+    var rvrsDTodo = true
+    var rvrsName = true
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
-        if (id == R.id.menu_sort) {
-            // TODO: Create pop-up for sorts: ID (Time Added), Priority; maybe: Datetime [I have project in Ada todo today...]
-            return true
-        }
         if (id == R.id.menu_deleteall) {
-            // Alert
+            // Creates an alert if an action is possible for quality of life
             if(todoDatabase?.getTodo()?.getTodoList().isNullOrEmpty()){
                 Toast.makeText(applicationContext,"You've got no todo's.",Toast.LENGTH_SHORT).show()
             }else{
@@ -115,7 +119,7 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
                         todoDatabase?.getTodo()?.removeTodo(todo)
                         onResume()
                     }
-                    Toast.makeText(applicationContext,"Cleared all todos.",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,"Cleared all todo's.",Toast.LENGTH_SHORT).show()
                 }
                 builder.setNeutralButton("Cancel"){ _, _ ->
                 }
@@ -125,6 +129,45 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
             }
             return true
         }
+        // Just type in "sortedBy = X" and "onResume()" upon fix of queries in TodoInterface and remove all the junk
+        if (id == R.id.sort_id) {
+            if(rvrsDAdded) {
+                todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoList()
+                rvrsDAdded = false
+            }else{
+                todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListR()
+                rvrsDAdded = true
+            }
+        }
+        if (id == R.id.sort_priority) {
+            if(rvrsPrior) {
+                todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListPriorR()
+                rvrsPrior = false
+            }else{
+                todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListPrior()
+                rvrsPrior = true
+            }
+        }
+        if (id == R.id.sort_date) {
+            if(rvrsDTodo) {
+                todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListDateR()
+                rvrsDTodo = false
+            }else{
+                todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListDate()
+                rvrsDTodo = true
+            }
+        }
+        if (id == R.id.sort_title) {
+            if(rvrsDTodo) {
+                todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListDateR()
+                rvrsDTodo = false
+            }else{
+                todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListDate()
+                rvrsDTodo = true
+            }
+        }
+        todoMainList.adapter = todoAdapter
+        todoMainList.layoutManager = LinearLayoutManager(this)
 
         return super.onOptionsItemSelected(item)
     }

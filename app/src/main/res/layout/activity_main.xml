@@ -7,14 +7,12 @@
     android:layout_height="match_parent"
     tools:context=".todo.TodoActivity">
 
-
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/todo_rv"
+        android:id="@+id/todoMainList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="85dp"
         app:layout_constraintBottom_toBottomOf="@id/divider2" />
-
 
     <View
         android:id="@+id/divider2"
@@ -26,7 +24,7 @@
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/todo_rv" />
+        app:layout_constraintTop_toBottomOf="@+id/todoMainList" />
 
     <EditText
         android:id="@+id/titleQuick"
@@ -55,7 +53,6 @@
         android:layout_marginBottom="8dp"
         android:text="@string/quick_add"
         app:layout_constraintBottom_toBottomOf="parent"
-
         app:layout_constraintEnd_toStartOf="@+id/add_todo"
         app:layout_constraintTop_toBottomOf="@+id/divider2" />
 

@@ -15,7 +15,32 @@
                 android:id="@+id/menu_sort"
                 android:orderInCategory="200"
                 android:title="@string/sort"
-                android:icon="@drawable/ic_sort" />
+                android:icon="@drawable/ic_sort">
+                <menu>
+                    <item
+                        android:id="@+id/sort_id"
+                        android:orderInCategory="210"
+                        android:title="@string/sort_id"
+                        android:icon="@drawable/ic_dateadded" />
+                    <item
+                        android:id="@+id/sort_title"
+                        android:orderInCategory="220"
+                        android:title="@string/sort_title"
+                        android:icon="@drawable/ic_title" />
+
+                    <item
+                        android:id="@+id/sort_priority"
+                        android:orderInCategory="230"
+                        android:title="@string/sort_priority"
+                        android:icon="@drawable/ic_priority" />
+
+                    <item
+                        android:id="@+id/sort_date"
+                        android:orderInCategory="240"
+                        android:title="@string/sort_date"
+                        android:icon="@drawable/ic_datetobedone" />
+                </menu>
+            </item>
 
             <item
                 android:id="@+id/menu_deleteall"

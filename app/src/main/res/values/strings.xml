@@ -15,6 +15,10 @@
     <string name="sort">Sort</string>
     <string name="clear">Clear</string>
     <string name="menu">Menu</string>
+    <string name="sort_id">Date Added</string>
+    <string name="sort_priority">Priority</string>
+    <string name="sort_date">Date to be done</string>
+    <string name="sort_title">Title</string>
     <string-array name="dialog_list">
         <item>Edit</item>
         <item>Delete</item>

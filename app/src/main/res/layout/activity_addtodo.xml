@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <EditText
         android:id="@+id/titleNew"
         android:layout_width="0dp"
@@ -33,7 +32,6 @@
         app:layout_constraintBottom_toTopOf="@+id/dateNew"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
     <RadioGroup
         android:id="@+id/radioGroup"
@@ -113,4 +111,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/dateNew"
         android:autofillHints="" />
+
 </android.support.constraint.ConstraintLayout>

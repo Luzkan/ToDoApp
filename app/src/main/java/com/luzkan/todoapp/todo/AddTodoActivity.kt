@@ -43,7 +43,7 @@ class AddTodoActivity: AppCompatActivity(), RadioGroup.OnCheckedChangeListener{
                     finish()
                 }
             }
-        }else{
+        }else {
             addTodo.text = getString(R.string.update)
             val tId = intent.getIntExtra("tId", 0)
             // Setting values retrieved from TodoActivity (user is editing stuff)
