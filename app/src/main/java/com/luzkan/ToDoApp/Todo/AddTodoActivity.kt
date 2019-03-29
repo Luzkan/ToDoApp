@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.widget.RadioGroup
+import android.widget.Toast
 import com.luzkan.ToDoApp.R
 import com.luzkan.ToDoApp.data.local.TodoListDatabase
 import com.luzkan.ToDoApp.data.local.models.Todo
 import kotlinx.android.synthetic.main.activity_addtodo.*
+import java.text.SimpleDateFormat
 
 class AddTodoActivity: AppCompatActivity(), RadioGroup.OnCheckedChangeListener{
 
@@ -25,38 +27,43 @@ class AddTodoActivity: AppCompatActivity(), RadioGroup.OnCheckedChangeListener{
         radioGroup.setOnCheckedChangeListener(this)
 
 
-        // Moves to new screen in which user can update or create new task
+        // Moved from the main TodoActivity, retrieving those values here
         val title = intent.getStringExtra("title")
         val description = intent.getStringExtra("description")
+        val time = intent.getStringExtra("time")
+        val date = intent.getStringExtra("date")
+
         if (title == null || title == ""){
             addTodo.setOnClickListener{
-                // App bugs out permanently if user tries to do dumb stuff
-                // Could be TODO: Replaced with alert
-                if(title_ed == null || title_ed.text.toString() == "") {
-                    finish()
+                // Prevent user from adding silly task w/o title that permanently crashes the app
+                if(titleNew == null || titleNew.text.toString() == "") {
+                    Toast.makeText(applicationContext,"Set the Title of Todo.",Toast.LENGTH_SHORT).show()
                 }else {
-                    val todo = Todo(title_ed.text.toString(), descriptionNew.text.toString(), priority)
+                    // The ID (last value of To-do) will be auto incremented in Db
+                    val todo = Todo(titleNew.text.toString(), descriptionNew.text.toString(), priority, dateNew.text.toString(), timeNew.text.toString())
                     todoDatabase!!.getTodo().saveTodo(todo)
+                    finish()
                 }
-                finish()
             }
         }else{
             addTodo.text = getString(R.string.update)
             val tId = intent.getIntExtra("tId", 0)
-            title_ed.setText(title)
-
-            // It crashes if it tries to put null into a editView (which should be string)
-            if (description != null || description != "")
-                descriptionNew.setText(description)
+            // Setting values retrieved from TodoActivity (user is editing stuff)
+            titleNew.setText(title)
+            descriptionNew.setText(description)
+            timeNew.setText(time)
+            dateNew.setText(date)
 
             addTodo.setOnClickListener {
-                if(title_ed == null || title_ed.text.toString() == "") {
-                    finish()
+                if(titleNew == null || titleNew.text.toString() == "") {
+                    Toast.makeText(applicationContext,"Set the Title of Todo.",Toast.LENGTH_SHORT).show()
+                }else if(dateNew.text.toString().length > 5 || timeNew.text.toString().length > 5) {
+                    Toast.makeText(applicationContext,"Time or Date should be below 5 characters.",Toast.LENGTH_SHORT).show()
                 }else {
-                    val todo = Todo(title_ed.text.toString(), descriptionNew.text.toString(), priority, tId)
+                    val todo = Todo(titleNew.text.toString(), descriptionNew.text.toString(), priority, dateNew.text.toString(), timeNew.text.toString(), tId)
                     todoDatabase!!.getTodo().updateTodo(todo)
+                    finish()
                 }
-                finish()
             }
         }
     }

@@ -34,7 +34,7 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
             // Unlike AddTodoActivity, here if someone just presses a button, it can as well do nothing
             // As that behaviour is expected by user
             if(!(titleQuick == null || titleQuick.text.toString() == "")) {
-                val todo = Todo(titleQuick.text.toString(), "", 1)
+                val todo = Todo(titleQuick.text.toString(), "", 1, "", "")
                 todoDatabase!!.getTodo().saveTodo(todo)
                 titleQuick.setText("")
             }
@@ -59,6 +59,8 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
         intent.putExtra("title", todo.title)
         intent.putExtra("priority", todo.priority)
         intent.putExtra("description", todo.description)
+        intent.putExtra("date", todo.date)
+        intent.putExtra("time", todo.time)
         startActivity(intent)
     }
 
@@ -71,7 +73,9 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
             intent.putExtra("tId", todo.tId)
             intent.putExtra("title", todo.title)
             intent.putExtra("priority", todo.priority)
-            intent.putExtra("detail", todo.description)
+            intent.putExtra("description", todo.description)
+            intent.putExtra("date", todo.date)
+            intent.putExtra("time", todo.time)
             startActivity(intent)
         }else{
             todoDatabase?.getTodo()?.removeTodo(todo)

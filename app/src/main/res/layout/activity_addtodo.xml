@@ -6,7 +6,7 @@
 
 
     <EditText
-        android:id="@+id/title_ed"
+        android:id="@+id/titleNew"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -26,13 +26,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="24dp"
+        android:autofillHints=""
         android:hint="@string/description"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
+        app:layout_constraintBottom_toTopOf="@+id/dateNew"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:autofillHints="" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <RadioGroup
@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="192dp"
+        android:layout_marginBottom="148dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -81,8 +81,36 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:text="@string/addTodo"
-        app:layout_constraintBottom_toTopOf="@+id/title_ed"
+        app:layout_constraintBottom_toTopOf="@+id/titleNew"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/dateNew"
+        android:hint="@string/date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="24dp"
+        android:ems="10"
+        android:inputType="date"
+        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:autofillHints="" />
+
+    <EditText
+        android:id="@+id/timeNew"
+        android:hint="@string/time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:ems="5"
+        android:inputType="time"
+        app:layout_constraintBottom_toBottomOf="@+id/dateNew"
+        app:layout_constraintEnd_toStartOf="@+id/dateNew"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/dateNew"
+        android:autofillHints="" />
 </android.support.constraint.ConstraintLayout>

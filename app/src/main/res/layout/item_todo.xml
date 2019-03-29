@@ -60,10 +60,10 @@
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/date"
                 app:layout_constraintStart_toEndOf="@+id/frameLayout"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Todo goes in here" />
+                tools:text="Title of Todo" />
 
             <TextView
                 android:id="@+id/description"
@@ -76,10 +76,38 @@
                 android:ems="1"
                 android:maxLines="1"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/date"
                 app:layout_constraintStart_toEndOf="@+id/frameLayout"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Todo goes in here" />
+                tools:text="Description of Todo" />
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="35dp"
+                android:layout_height="18dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="4dp"
+                android:ems="1"
+                android:maxLines="1"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toTopOf="@+id/description"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/title"
+                app:layout_constraintVertical_bias="0.8"
+                tools:text="17.04" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="35dp"
+                android:layout_height="18dp"
+                android:layout_marginEnd="4dp"
+                android:ems="1"
+                android:maxLines="1"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toTopOf="@+id/description"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/description"
+                tools:text="22:36" />
 
 
         </android.support.constraint.ConstraintLayout>

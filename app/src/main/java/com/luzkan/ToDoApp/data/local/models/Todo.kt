@@ -11,5 +11,9 @@ class Todo(
     @ColumnInfo(name = "todo_description")
     var description:String = "",
     @ColumnInfo(name = "todo_priority")
-    var priority: Int = 0,
+    var priority: Int = 1,
+    @ColumnInfo(name = "todo_date")
+    var date:String = "",
+    @ColumnInfo(name = "todo_time")
+    var time:String = "",
     @PrimaryKey(autoGenerate = true) var tId: Int = 0)
