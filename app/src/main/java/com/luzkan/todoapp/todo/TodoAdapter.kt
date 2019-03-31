@@ -8,6 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.luzkan.todoapp.R
 import com.luzkan.todoapp.data.local.models.Todo
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.ArrayList
 
 class TodoAdapter(var todoList: List<Todo>? = ArrayList()): RecyclerView.Adapter<TodoAdapter.TodoViewHolder>(){
@@ -41,7 +43,7 @@ class TodoAdapter(var todoList: List<Todo>? = ArrayList()): RecyclerView.Adapter
                 view.findViewById<TextView>(R.id.first_letter).text = todoList[position].title.first().toUpperCase().toString()
                 view.findViewById<ImageView>(R.id.priority_imgView).setImageResource(getImage(todoList[position].priority))
                 view.findViewById<TextView>(R.id.description).text = todoList[position].description
-                view.findViewById<TextView>(R.id.date).text = todoList[position].date
+                view.findViewById<TextView>(R.id.date).text = if(todoList[position].date == null) "N/A" else SimpleDateFormat("dd.MM").format(todoList[position].date)
                 view.findViewById<TextView>(R.id.time).text = todoList[position].time
             }
         }

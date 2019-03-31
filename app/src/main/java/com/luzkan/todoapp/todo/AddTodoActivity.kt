@@ -10,6 +10,8 @@ import com.luzkan.todoapp.R
 import com.luzkan.todoapp.data.local.TodoListDatabase
 import com.luzkan.todoapp.data.local.models.Todo
 import kotlinx.android.synthetic.main.activity_addtodo.*
+import java.sql.Date
+import java.text.SimpleDateFormat
 
 class AddTodoActivity: AppCompatActivity(), RadioGroup.OnCheckedChangeListener{
 
@@ -30,15 +32,20 @@ class AddTodoActivity: AppCompatActivity(), RadioGroup.OnCheckedChangeListener{
         val description = intent.getStringExtra("description")
         val time = intent.getStringExtra("time")
         val date = intent.getStringExtra("date")
+        val df = SimpleDateFormat("dd.MM.yyyy")
 
         if (title == null || title == ""){
             addTodo.setOnClickListener{
                 // Prevent user from adding silly task w/o title that permanently crashes the app
                 if(titleNew == null || titleNew.text.toString() == "") {
                     Toast.makeText(applicationContext,"Set the Title of Todo.",Toast.LENGTH_SHORT).show()
+                }else if(timeNew.text.toString().length > 5 || !((dateNew.text.toString().matches("^([0-2][0-9]|(3)[0-1])(\\.)(((0)[0-9])|((1)[0-2]))".toRegex())) || dateNew.text.toString() == "")) {
+                    Toast.makeText(applicationContext,"Time should match (hh:mm) and Date  match (Day/Month) format.",Toast.LENGTH_SHORT).show()
                 }else {
                     // The ID (last value of To-do) will be auto incremented in Db
-                    val todo = Todo(titleNew.text.toString(), descriptionNew.text.toString(), priority, dateNew.text.toString(), timeNew.text.toString())
+                    // @Date: Problem arises when user wants to sort some tasks around the end of December when he scheduled something to January. Obviously easy fix is to create calendar instance in which user can just tap for the date but I wanted to keep it 5 chars quick
+                    //        After it's done, the "val df" could be just "getDateInstance()"
+                    val todo = Todo(titleNew.text.toString(), descriptionNew.text.toString(), priority, if(dateNew.text.toString() == "") null else Date(df.parse(dateNew.text.toString().plus(".2019")).time), timeNew.text.toString())
                     todoDatabase!!.getTodo().saveTodo(todo)
                     finish()
                 }
@@ -55,10 +62,10 @@ class AddTodoActivity: AppCompatActivity(), RadioGroup.OnCheckedChangeListener{
             addTodo.setOnClickListener {
                 if(titleNew == null || titleNew.text.toString() == "") {
                     Toast.makeText(applicationContext,"Set the Title of Todo.",Toast.LENGTH_SHORT).show()
-                }else if(dateNew.text.toString().length > 5 || timeNew.text.toString().length > 5) {
-                    Toast.makeText(applicationContext,"Time or Date should be below 5 characters.",Toast.LENGTH_SHORT).show()
+                }else if(timeNew.text.toString().length > 5 || !((dateNew.text.toString().matches("^([0-2][0-9]|(3)[0-1])(\\.)(((0)[0-9])|((1)[0-2]))".toRegex())) || dateNew.text.toString() == "")) {
+                    Toast.makeText(applicationContext,"Time should match (hh:mm) and Date match (Day/Month) format.",Toast.LENGTH_SHORT).show()
                 }else {
-                    val todo = Todo(titleNew.text.toString(), descriptionNew.text.toString(), priority, dateNew.text.toString(), timeNew.text.toString(), tId)
+                    val todo = Todo(titleNew.text.toString(), descriptionNew.text.toString(), priority, if(dateNew.text.toString() == "") null else Date(df.parse(dateNew.text.toString().plus(".2019")).time), timeNew.text.toString(), tId)
                     todoDatabase!!.getTodo().updateTodo(todo)
                     finish()
                 }

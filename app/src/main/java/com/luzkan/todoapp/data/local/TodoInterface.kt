@@ -40,10 +40,10 @@ interface TodoInterface{
     @Query("SELECT*FROM todo ORDER BY tId DESC")
     fun getTodoListR(): List<Todo>
 
-    @Query("SELECT*FROM todo ORDER BY todo_priority ASC")
+    @Query("SELECT*FROM todo ORDER BY todo_priority DESC")
     fun getTodoListPrior(): List<Todo>
 
-    @Query("SELECT*FROM todo ORDER BY todo_priority DESC")
+    @Query("SELECT*FROM todo ORDER BY todo_priority ASC")
     fun getTodoListPriorR(): List<Todo>
 
     @Query("SELECT*FROM todo ORDER BY todo_date ASC")

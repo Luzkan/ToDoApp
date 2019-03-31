@@ -3,10 +3,12 @@ package com.luzkan.todoapp.data.local
 import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
+import android.arch.persistence.room.TypeConverters
 import android.content.Context
 import com.luzkan.todoapp.data.local.models.Todo
 
 @Database(entities = [Todo::class], version = 1, exportSchema = false)
+@TypeConverters(TodoConverters::class)
 abstract class TodoListDatabase: RoomDatabase(){
 
     abstract fun getTodo(): TodoInterface
