@@ -19,4 +19,4 @@ So besides what was necessery for max points I decided to:
 * Quick Add
 * Custom app colors and icon
 
-![](todoappluzkan.gif
+![](todoappluzkan.gif)
