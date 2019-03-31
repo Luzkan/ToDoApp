@@ -18,6 +18,10 @@ So besides what was necessery for max points I decided to:
 * Custom app colors and icon
 * Quick Add
 
+![](todoappluzkan.gif)
+
+
 ## Todo:
-* Change Date from being a String into a Date
-* Fix Queries passing var String problem
+* Change Date from being a String into a Date (to make date sort work properly)
+* Fix Queries passing var String problem (because I dislike my workaround)
+
