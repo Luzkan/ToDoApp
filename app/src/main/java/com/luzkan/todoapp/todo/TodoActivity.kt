@@ -27,6 +27,7 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
     private var rvrsTodo = true
     private var rvrsTitle = true
     private var restored = true
+    private var swap = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +38,10 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
         todoAdapter?.setTodoItemClickedListener(this)
 
         // Action button that moves user to adding interface
-        add_todo.setOnClickListener { startActivity(Intent(this, AddTodoActivity::class.java)) }
+        add_todo.setOnClickListener{
+            swap = true
+            startActivity(Intent(this, AddTodoActivity::class.java))
+        }
 
         // Quick Add button in the main menu
         addTodoQuick.setOnClickListener{
@@ -50,6 +54,7 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
                 titleQuick.setText("")
             }
             // Resume must be called to refresh main screen by getting what we just put into Database
+            swap = true
             onResume()
         }
 
@@ -67,13 +72,13 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
     override fun onResume() {
         super.onResume()
         // Restored makes the one-time switch to true so after restoring fex: priority it doesn't do nothing when user tries to do same sort trough menu on first try
-        if(restored)
-        sortedList(sortBy, true)
-        else
-        sortedList(sortBy, false)
+        if (restored) sortedList(sortBy, true, swap)
+        else sortedList(sortBy, false, swap)
+
         todoMainList.adapter = todoAdapter
         todoMainList.layoutManager = LinearLayoutManager(this)
         todoMainList.hasFixedSize()
+        swap = false
     }
 
     // Keep the way the list is sorted after rotation
@@ -121,6 +126,7 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
         intent.putExtra("description", todo.description)
         intent.putExtra("date", todo.date)
         intent.putExtra("time", todo.time)
+        swap = true
         startActivity(intent)
     }
 
@@ -136,8 +142,10 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
             intent.putExtra("description", todo.description)
             intent.putExtra("date", todo.date)
             intent.putExtra("time", todo.time)
+            swap = true
             startActivity(intent)
         }else{
+            swap = true
             todoDatabase?.getTodo()?.removeTodo(todo)
             onResume()
         }
@@ -169,9 +177,11 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
                 builder.setPositiveButton("Yes"){ _, _ ->
                     for(todo in todoDatabase?.getTodo()?.getTodoList()!!) {
                         todoDatabase?.getTodo()?.removeTodo(todo)
-                        onResume()
                     }
                     Toast.makeText(applicationContext,"Cleared all todo's.",Toast.LENGTH_SHORT).show()
+                    sortBy = R.id.sort_id
+                    todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoList()
+                    onResume()
                 }
                 builder.setNeutralButton("Cancel"){ _, _ ->
                 }
@@ -184,40 +194,36 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
         // Just type in "sortedBy = X" and "onResume()" upon fix of queries in TodoInterface and remove all the junk
         // @Update: It seems that it's not possible in a easy way due to prevention of SQL Injection.
         //          Changed the code so it's actually clean(-ish)
-        sortedList(sortBy, true)
+        sortedList(sortBy, true, false)
         todoMainList.adapter = todoAdapter
         todoMainList.layoutManager = LinearLayoutManager(this)
         return super.onOptionsItemSelected(item)
     }
 
     // Switch is so that we get the reverse of list only upon sorting from options, not every time we go back to main activity
-    private fun sortedList(id: Int, switch: Boolean){
+    private fun sortedList(id: Int, switch: Boolean, swap: Boolean){
         if (id == R.id.sort_id) {
-            if(rvrsAdded)
-                todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoList()
-            else
-                todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListR()
+            if (swap) rvrsAdded = !rvrsAdded
+            if(rvrsAdded) todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoList()
+            else todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListR()
             if (switch) rvrsAdded = !rvrsAdded
         }
         if (id == R.id.sort_priority) {
-            if(rvrsPrior)
-                todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListPrior()
-            else
-                todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListPriorR()
+            if (swap) rvrsPrior = !rvrsPrior
+            if (rvrsPrior) todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListPrior()
+            else todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListPriorR()
             if (switch) rvrsPrior = !rvrsPrior
         }
         if (id == R.id.sort_date) {
-            if(rvrsTodo)
-                todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListDate()
-            else
-                todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListDateR()
+            if (swap) rvrsTodo = !rvrsTodo
+            if (rvrsTodo) todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListDate()
+            else todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListDateR()
             if (switch) rvrsTodo = !rvrsTodo
         }
         if (id == R.id.sort_title) {
-            if(rvrsTitle)
-                todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListTitle()
-            else
-                todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListTitleR()
+            if (swap) rvrsTitle = !rvrsTitle
+            if (rvrsTitle) todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListTitle()
+            else todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListTitleR()
             if (switch) rvrsTitle = !rvrsTitle
         }
     }
