@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Yours Todo\'s</string>
+    <string name="app_name">Yours Todos</string>
     <string name="update">Update todo</string>
     <string name="title">Title</string>
     <string name="description">Description (optional)</string>

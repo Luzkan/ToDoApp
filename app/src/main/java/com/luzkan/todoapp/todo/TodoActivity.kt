@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.SearchView
 import android.widget.Toast
 import com.luzkan.todoapp.R
 import com.luzkan.todoapp.data.local.TodoListDatabase
@@ -29,6 +30,10 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
     private var restored = true
     private var swap = false
 
+    // Used only for search function
+    private var displayList = ArrayList<Todo>()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -36,6 +41,12 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
         todoDatabase = TodoListDatabase.getInstance(this)
         todoAdapter = TodoAdapter()
         todoAdapter?.setTodoItemClickedListener(this)
+
+
+        search.setOnClickListener {
+            search.isIconified = false
+        }
+        searching(search, this)
 
         // Action button that moves user to adding interface
         add_todo.setOnClickListener{
@@ -159,13 +170,14 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu (adds items to the action bar if it is present)
         menuInflater.inflate(R.menu.menu_main, menu)
+        sortedList(sortBy, true, true)
+        todoMainList.adapter = todoAdapter
+        todoMainList.layoutManager = LinearLayoutManager(this)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        sortBy = item.itemId
-
-        if (sortBy == R.id.menu_deleteall) {
+        if (item.itemId == R.id.menu_deleteall) {
             // Creates an alert if an action is possible for quality of life
             if(todoDatabase?.getTodo()?.getTodoList().isNullOrEmpty()){
                 Toast.makeText(applicationContext,"You've got no todo's.",Toast.LENGTH_SHORT).show()
@@ -191,12 +203,17 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
             }
             return true
         }
-        // Just type in "sortedBy = X" and "onResume()" upon fix of queries in TodoInterface and remove all the junk
-        // @Update: It seems that it's not possible in a easy way due to prevention of SQL Injection.
-        //          Changed the code so it's actually clean(-ish)
-        sortedList(sortBy, true, false)
-        todoMainList.adapter = todoAdapter
-        todoMainList.layoutManager = LinearLayoutManager(this)
+
+        if(item.itemId != R.id.action_menudrop || item.itemId != R.id.menu_sort) {
+            sortBy = item.itemId
+
+            // Just type in "sortedBy = X" and "onResume()" upon fix of queries in TodoInterface and remove all the junk
+            // @Update: It seems that it's not possible in a easy way due to prevention of SQL Injection.
+            //          Changed the code so it's actually clean(-ish)
+            sortedList(sortBy, true, false)
+            todoMainList.adapter = todoAdapter
+            todoMainList.layoutManager = LinearLayoutManager(this)
+        }
         return super.onOptionsItemSelected(item)
     }
 
@@ -226,5 +243,51 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
             else todoAdapter?.todoList = todoDatabase?.getTodo()?.getTodoListTitleR()
             if (switch) rvrsTitle = !rvrsTitle
         }
+    }
+
+    private fun searching(search: SearchView, context: Context) {
+        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query!!.isNotEmpty()) {
+                    displayList.clear()
+                    val searchVal = query.toLowerCase()
+                    todoDatabase?.getTodo()?.getTodoList()!!.forEach {
+                        if (it.title.toLowerCase().contains(searchVal)) {
+                            displayList.add(it)
+                        }
+                    }
+                    todoAdapter?.todoList = displayList
+                    todoMainList.adapter = todoAdapter
+                    todoMainList.layoutManager = LinearLayoutManager(context)
+                } else {
+                    displayList.clear()
+                    sortedList(sortBy, true, true)
+                    todoMainList.adapter = todoAdapter
+                    todoMainList.layoutManager = LinearLayoutManager(context)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                if (newText.isNotEmpty()) {
+                    displayList.clear()
+                    val searchVal = newText.toLowerCase()
+                    todoDatabase?.getTodo()?.getTodoList()!!.forEach {
+                        if (it.title.toLowerCase().contains(searchVal)) {
+                            displayList.add(it)
+                        }
+                    }
+                    todoAdapter?.todoList = displayList
+                    todoMainList.adapter = todoAdapter
+                    todoMainList.layoutManager = LinearLayoutManager(context)
+                } else {
+                    displayList.clear()
+                    sortedList(sortBy, true, true)
+                    todoMainList.adapter = todoAdapter
+                    todoMainList.layoutManager = LinearLayoutManager(context)
+                }
+                return true
+            }
+        })
     }
 }

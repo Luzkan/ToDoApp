@@ -7,12 +7,25 @@
     android:layout_height="match_parent"
     tools:context=".todo.TodoActivity">
 
+    <SearchView
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:queryBackground="@android:color/transparent"
+        android:background="@drawable/edit_text_round"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/todoMainList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="46dp"
         android:layout_marginBottom="85dp"
-        app:layout_constraintBottom_toBottomOf="@id/divider2" />
+        app:layout_constraintBottom_toBottomOf="@id/divider2"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/divider2"
