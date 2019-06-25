@@ -19,6 +19,8 @@
     <string name="sort_priority">Priority</string>
     <string name="sort_date">Date to be done</string>
     <string name="sort_title">Title</string>
+    <string name="channel_name">test</string>
+    <string name="channel_description">anothertest</string>
     <string-array name="dialog_list">
         <item>Edit</item>
         <item>Delete</item>

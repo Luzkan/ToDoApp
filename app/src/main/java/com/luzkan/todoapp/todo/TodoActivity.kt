@@ -1,9 +1,16 @@
 package com.luzkan.todoapp.todo
 
+import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.content.BroadcastReceiver
+
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.SystemClock
+import android.support.v4.app.NotificationCompat
+import android.support.v4.app.NotificationManagerCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -11,12 +18,21 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.SearchView
 import android.widget.Toast
+import com.luzkan.todoapp.Notifications
 import com.luzkan.todoapp.R
 import com.luzkan.todoapp.data.local.TodoListDatabase
 import com.luzkan.todoapp.data.local.models.Todo
 import kotlinx.android.synthetic.main.activity_main.*
+import java.lang.Long.getLong
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.util.*
+import kotlin.collections.ArrayList
 
 class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
+
 
     private var todoDatabase: TodoListDatabase? = null
     private var todoAdapter: TodoAdapter? = null
@@ -38,10 +54,12 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Needs to be called on start (creates notification channel for android above Oreo 8.0)
+        createNotificationChannel()
+
         todoDatabase = TodoListDatabase.getInstance(this)
         todoAdapter = TodoAdapter()
         todoAdapter?.setTodoItemClickedListener(this)
-
 
         search.setOnClickListener {
             search.isIconified = false
@@ -77,6 +95,23 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
         rvrsTitle = !sharedPref.getBoolean("rvrsTitleBool", true)
         sortBy = sharedPref.getInt("savedTypeOfSortPause", R.id.sort_id)
         restored = true
+    }
+
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString(R.string.channel_name)
+            val descriptionText = getString(R.string.channel_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel("TodoChanID", name, importance).apply {
+                description = descriptionText
+            }
+            // Register the channel with the system
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 
     // Loads data back and sets adapter to ListView
@@ -128,6 +163,36 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
         }
     }
 
+    // Creates an alert on todos date/time if button was pressed to prepare a notification
+    override fun onTodoAlarmClicked(todo: Todo) {
+        if(todo.time == "" || todo.date.toString() == "N/A" || todo.date == null) {
+            Toast.makeText(applicationContext,"I can't notify todo without date/time defined.",Toast.LENGTH_SHORT).show()
+        }else{
+            val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val intent = Intent(this, Notifications::class.java).putExtra("title", todo.title)
+            intent.putExtra("desc", todo.description)
+            intent.putExtra("prior", todo.priority)
+
+            val wakeUpTime = convertDateToLong(todo.date.toString() + " " + todo.time)
+            Toast.makeText(applicationContext,"Notif. set at: " + " | " + convertLongToTime(wakeUpTime),Toast.LENGTH_SHORT).show()
+            val broadcast = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            manager.setExact(AlarmManager.RTC_WAKEUP, wakeUpTime, broadcast)
+        }
+    }
+
+    // Two converters for display information and for long used in AlarmManager.
+    // One design flaw of not using calendar (because of previous lack of knowledge of existance of such thing in Kotlin/Android) strikes back
+    private fun convertDateToLong(date: String): Long {
+        val df = SimpleDateFormat("yyyy-MM-dd HH:mm")
+        return df.parse(date).time
+    }
+
+    private fun convertLongToTime(time: Long): String {
+        val date = Date(time)
+        val format = SimpleDateFormat("yyyy-MM-dd HH:mm")
+        return format.format(date)
+    }
+
     // Pressing task moves user to edit screen
     override fun onTodoItemClicked(todo: Todo) {
         val intent = Intent(this, AddTodoActivity::class.java)
@@ -135,7 +200,7 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
         intent.putExtra("title", todo.title)
         intent.putExtra("priority", todo.priority)
         intent.putExtra("description", todo.description)
-        intent.putExtra("date", todo.date)
+        intent.putExtra("date", todo.date.toString().takeLast(2) + "." + todo.date.toString().takeLast(5).take(2))
         intent.putExtra("time", todo.time)
         swap = true
         startActivity(intent)
@@ -151,7 +216,7 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
             intent.putExtra("title", todo.title)
             intent.putExtra("priority", todo.priority)
             intent.putExtra("description", todo.description)
-            intent.putExtra("date", todo.date)
+            intent.putExtra("date", todo.date.toString().takeLast(2) + "." + todo.date.toString().takeLast(5).take(2))
             intent.putExtra("time", todo.time)
             swap = true
             startActivity(intent)
@@ -162,7 +227,6 @@ class TodoActivity : AppCompatActivity(), TodoAdapter.OnTodoItemClickedListener{
         }
             dialog.dismiss()
         }.create()
-
         alertDialog.show()
     }
 

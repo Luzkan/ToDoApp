@@ -61,8 +61,10 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/date"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/frameLayout"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0"
                 tools:text="Title of Todo" />
 
             <TextView
@@ -108,6 +110,21 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/description"
                 tools:text="22:36" />
+
+            <Button
+                android:id="@+id/alarm"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="42dp"
+                android:layout_marginBottom="8dp"
+                android:onClick="setAlarm"
+                android:text="A"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/date"
+                app:layout_constraintStart_toEndOf="@+id/description"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </android.support.constraint.ConstraintLayout>

@@ -22,6 +22,7 @@
         <activity android:name="com.luzkan.todoapp.todo.AddTodoActivity">
             <!--<meta-data android:name="android.support.PARENT_ACTIVITY"/>-->
         </activity>
+        <receiver android:name=".Notifications" />
     </application>
 
 </manifest>

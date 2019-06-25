@@ -4,11 +4,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.luzkan.todoapp.R
 import com.luzkan.todoapp.data.local.models.Todo
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.ArrayList
 
@@ -28,10 +28,10 @@ class TodoAdapter(var todoList: List<Todo>? = ArrayList()): RecyclerView.Adapter
 
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int){
         holder.view.setOnClickListener{onTodoItemClickedListener!!.onTodoItemClicked(todoList!![position])}
-        holder.view.setOnLongClickListener{
-            onTodoItemClickedListener!!.onTodoItemLongClicked(todoList!![position])
+        holder.view.setOnLongClickListener{onTodoItemClickedListener!!.onTodoItemLongClicked(todoList!![position])
             true
         }
+        holder.view.findViewById<Button>(R.id.alarm).setOnClickListener{onTodoItemClickedListener!!.onTodoAlarmClicked(todoList!![position])}
         holder.onBindViews(position)
     }
 
@@ -58,5 +58,6 @@ class TodoAdapter(var todoList: List<Todo>? = ArrayList()): RecyclerView.Adapter
     interface OnTodoItemClickedListener{
         fun onTodoItemClicked(todo: Todo)
         fun onTodoItemLongClicked(todo: Todo)
+        fun onTodoAlarmClicked(todo: Todo)
     }
 }
